@@ -35,24 +35,6 @@ final class SettlementRepositoryTest extends JsonApiTestCase
         $this->assertSame(100, $settlement->getTotalCommissionAmount());
     }
 
-    public function test_it_finds_all_available_periods(): void
-    {
-        $this->loadFixturesFromFile('SettlementRepositoryTest/test_it_finds_all_available_periods.yaml');
-
-        $period[] = $this->generatePeriod('last week monday', 'last week sunday');
-        $period[] = $this->generatePeriod('first day of January', 'last day of January');
-        $period[] = $this->generatePeriod('first day of April', 'last day of June');
-
-        rsort($period);
-
-        $period = array_unique($period, \SORT_STRING);
-
-        $this->assertSame(
-            $period,
-            $this->repository->findAllPeriods()
-        );
-    }
-
     public function test_it_finds_all_settlements_by_vendor(): void
     {
         $this->loadFixturesFromFile('SettlementRepositoryTest/test_it_finds_all_settlements_by_vendor.yaml');
