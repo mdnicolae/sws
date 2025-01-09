@@ -7,4 +7,4 @@ mysql:
   # the CLI will return an error.
   type: mysql:11.0
   # The disk attribute is the size of the persistent disk (in MB) allocated to the service.
-  disk: 1024MB
+  disk: 1024
