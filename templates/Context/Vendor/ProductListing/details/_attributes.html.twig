@@ -1,0 +1,41 @@
+<div id="attributes">
+    {% if productDraft.attributes|length == 0 %}
+        {{ 'open_marketplace.ui.no_draft_attributes'|trans }}
+    {% else %}
+        <div class="ui top attached tabular menu">
+            {% set setLocales = [] %}
+            {% for attributeValue in productDraft.attributes %}
+                {% if attributeValue.localeCode not in setLocales %}
+                    {%  set setLocales = setLocales|merge([attributeValue.localeCode]) %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% for locale in setLocales %}
+            {% set localeName = (locale is not null ? locale|sylius_locale_name : '') %}
+
+            <h3>{{ 'sylius.ui.attributes'|trans }} {% if localeName != '' %}- {{ localeName }} {% endif %}</h3>
+            <div class="ui segment">
+                <table class="ui very basic celled table">
+                    <tbody>
+                        {% for attributeValue in productDraft.attributes|filter(attributeValue => attributeValue.localeCode == locale) %}
+                            <tr>
+                                <td class="five wide">
+                                    <strong class="gray text">{{ attributeValue.name }}</strong>
+                                </td>
+                                <td>
+                                    {% include [
+                                        '@SyliusAdmin/Product/Show/Types/' ~ attributeValue.type ~ '.html.twig',
+                                        '@SyliusAttribute/Types/' ~ attributeValue.type ~ '.html.twig',
+                                        '@SyliusAdmin/Product/Show/Types/default.html.twig'
+                                    ] with {
+                                        'attribute': attributeValue
+                                    } %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>

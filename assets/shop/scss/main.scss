@@ -1,0 +1,49 @@
+@import "error_pages";
+@import "shop/_checkout";
+@import "shop/_vendor_page";
+@import "shop/_wishlists";
+@import "vendor/attributes";
+@import "vendor/_layout";
+@import "vendor/_forms";
+@import "vendor/_listing_dropdown";
+@import "vendor/_review_dropdown";
+@import "vendor/_messaging";
+@import "vendor/_orders";
+
+#menu .item:hover {
+  color: white !important;
+  background-color: rgba(0, 0, 0, .14) !important;
+}
+
+body.pushable .pusher {
+  background-color: #fbfbfb;
+}
+
+.ui.label.teal {
+  background-color: #0ab727 !important;
+}
+
+.ui.label.blue {
+  background-color: #39b99a !important;
+}
+
+// Entity listing table responsiveness fix
+@media (max-width: 767px) {
+  .ui.table:not(.unstackable) {
+    thead {
+      display: table-header-group;
+    }
+
+    tbody {
+      display: table-row-group!important;
+    }
+
+    tr {
+      display: table-row!important;
+    }
+
+    tr > td, tr > th {
+      display: table-cell!important;
+    }
+  }
+}

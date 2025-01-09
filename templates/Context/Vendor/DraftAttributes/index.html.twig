@@ -1,0 +1,20 @@
+{% extends '@SyliusShop/Account/layout.html.twig' %}
+{% use 'Context/Vendor/Common/_breadcrumb.html.twig' %}
+
+{% set definition = resources.definition %}
+{% block title %}{{ 'open_marketplace.ui.draft_attributes'|trans }} | {{ parent() }}{% endblock %}
+
+{% block breadcrumb_page %}
+    <div class="active section">{{ 'sylius.ui.attributes'|trans }}</div>
+{% endblock %}
+
+{% block subcontent %}
+    {% include "Context/Vendor/_header.html.twig" with {
+        "header": 'open_marketplace.ui.draft_attributes',
+        "subheader": 'open_marketplace.ui.manage_product_listing_attributes',
+        "icon": 'tag',
+        "buttons": 'Context/Vendor/DraftAttributes/_menu.html.twig'
+    } %}
+
+    {{ sylius_grid_render(resources, '@SyliusAdmin/Grid/_default.html.twig') }}
+{% endblock %}

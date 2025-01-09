@@ -1,0 +1,64 @@
+{% extends '@SyliusShop/Account/layout.html.twig' %}
+{% use 'Context/Vendor/Common/_breadcrumb.html.twig' %}
+
+{% form_theme form '@SyliusShop/Form/theme.html.twig' %}
+
+{% block title %}{{ 'sylius.ui.your_profile'|trans }} | {{ parent() }}{% endblock %}
+
+{% block breadcrumb_page %}
+    <div class="active section">{{ 'sylius.ui.shipping_method'|trans }}</div>
+{% endblock %}
+
+{% block subcontent %}
+    {% include "Context/Vendor/_header.html.twig" with {
+        "header": 'open_marketplace.ui.shipping_methods',
+        "subheader": 'open_marketplace.ui.manage_shipping_methods',
+        "icon": 'shipping',
+    } %}
+
+    <div class="ui stackable grid sylius-tabular-form">
+        <div class="sixteen wide column">
+            {{ form_start(form, { 'attr': {'class': 'ui form vendor-panel-form vendor-shipping-form'}}) }}
+
+            <div class="ui tab active">
+                <div class="ui segments">
+                    {% for channel in form.channels %}
+                        <h3>{{ channel.vars.label }}</h3>
+                        <div class="ui segment">
+                            <div id="{{ channel.vars.id }}">
+                                {% if channel.children|length > 0 %}
+                                    {% for method in channel %}
+                                        <div class="field">
+                                            <div class="ui labeled toggle checkbox">
+                                                {{ form_widget(method) }}
+                                                {{ form_label(method) }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="ui icon info yellow message">
+                                        <i class="info circle icon"></i>
+                                        <div class="content">
+                                            <div class="header">
+                                                {{ 'sylius.ui.info'|trans }}
+                                            </div>
+                                            <p>
+                                                {{ 'open_marketplace.ui.no_shipping_methods_available'|trans }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <br />
+
+            <button type="submit" class="ui large primary button" {{ sylius_test_html_attribute('save-changes') }}>{{ 'sylius.ui.save_changes'|trans }}</button>
+
+            {{ form_row(form._token) }}
+            {{ form_end(form, {'render_rest': false}) }}
+        </div>
+    </div>
+{% endblock %}

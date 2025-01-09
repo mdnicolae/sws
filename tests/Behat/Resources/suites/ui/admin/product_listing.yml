@@ -1,0 +1,17 @@
+default:
+    suites:
+        ui_managing_product_listings:
+            contexts:
+                - open_marketplace.behat.context.ui.admin.product_listing
+                - open_marketplace.behat.context.setup.product_listing
+                - tests.open_marketplace.behat.context.setup.draft_attribute
+                - tests.open_marketplace.behat.context.setup.product
+                - Behat\MinkExtension\Context\MinkContext
+                - sylius.behat.context.setup.shop_security
+                - sylius.behat.context.setup.channel
+                - open_marketplace.behat.context.setup.vendor
+                - sylius.behat.context.hook.doctrine_orm
+                - sylius.behat.context.setup.admin_security
+                - sylius.behat.context.ui.admin.impersonating_customers
+            filters:
+                tags: '@managing_product_listings&&@ui'

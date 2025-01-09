@@ -1,0 +1,18 @@
+{% extends '@SyliusShop/Account/layout.html.twig' %}
+{% use 'Context/Vendor/Common/_breadcrumb.html.twig' %}
+
+{% block title %}{{ 'sylius.ui.order_history'|trans }} | {{ parent() }}{% endblock %}
+
+{% block breadcrumb_page %}
+    <div class="active section">{{ 'sylius.ui.order_history'|trans }}</div>
+{% endblock %}
+
+{% block subcontent %}
+    {% include "Context/Vendor/_header.html.twig" with {
+        "header": 'open_marketplace.ui.orders',
+        "subheader": 'open_marketplace.ui.manage_orders',
+        "icon": 'suitcase'
+    } %}
+
+    {{ sylius_grid_render(resources, '@SyliusShop/Grid/_default.html.twig') }}
+{% endblock %}
