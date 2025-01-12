@@ -1,0 +1,33 @@
+framework:
+    session:
+        handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
+        save_path: '%env(REDIS_URL)%'
+
+services:
+    Redis:
+        class: Redis
+        calls:
+            - method: connect
+              arguments:
+                  - '%env(REDIS_HOST)%'
+                  - '%env(int:REDIS_PORT)%'
+
+    redis.session_handler:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
+        arguments:
+            - '@Redis'
+            - { prefix: 'session_', ttl: 86400 }
+
+sylius_core:
+    filesystem:
+        adapter: aws-s3
+        adapter_options:
+            bucket: '%env(SUPABASE_BUCKET)%'
+            region: 'us-east-1'
+            version: 'latest'
+            endpoint: '%env(SUPABASE_URL)%/storage/v1'
+            credentials:
+                key: '%env(SUPABASE_KEY)%'
+                secret: 'dummy' # Supabase uses key-only auth
+            options:
+                override_endpoint: true 

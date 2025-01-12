@@ -1,0 +1,66 @@
+[build]
+builder = "nixpacks"
+buildCommand = """
+composer require --no-scripts league/flysystem-aws-s3-v3 predis/predis && \
+composer install --prefer-dist --no-interaction --no-scripts --no-progress && \
+composer dump-autoload --classmap-authoritative && \
+bin/console sylius:install:assets --no-interaction && \
+bin/console sylius:theme:assets:install public --no-interaction
+"""
+
+[deploy]
+startCommand = "php-fpm"
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+
+[env]
+PHP_VERSION = "8.2"
+APP_ENV = "prod"
+APP_DEBUG = "0"
+NGINX_VERSION = "1.21"
+COMPOSER_ALLOW_SUPERUSER = "1"
+
+[[services]]
+name = "web"
+serviceType = "web"
+envVars = [
+    { key = "APP_SECRET", value = "$APP_SECRET" },
+    { key = "DATABASE_URL", value = "$DATABASE_URL" },
+    { key = "PHP_DATE_TIMEZONE", value = "UTC" },
+    { key = "MAILER_URL", value = "$MAILER_URL" },
+    { key = "SUPABASE_URL", value = "$SUPABASE_URL" },
+    { key = "SUPABASE_KEY", value = "$SUPABASE_KEY" },
+    { key = "SUPABASE_BUCKET", value = "sylius-media" }
+]
+
+[[services]]
+name = "mysql"
+serviceType = "mysql"
+envVars = [
+    { key = "MYSQL_DATABASE", value = "open_marketplace" },
+    { key = "MYSQL_USER", value = "open_marketplace" },
+    { key = "MYSQL_PASSWORD", value = "$MYSQL_PASSWORD" },
+    { key = "MYSQL_ROOT_PASSWORD", value = "$MYSQL_ROOT_PASSWORD" }
+]
+
+[[services]]
+name = "redis"
+serviceType = "redis"
+
+[[services]]
+name = "assets"
+serviceType = "worker"
+buildCommand = """
+yarn install && \
+yarn cache clean
+"""
+startCommand = "yarn prod"
+envVars = [
+    { key = "NODE_VERSION", value = "14.18.0" },
+    { key = "GULP_ENV", value = "prod" }
+]
+
+[volumes]
+public-media = "/srv/open_marketplace/public/media"
+mysql-data = "/var/lib/mysql" 
