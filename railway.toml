@@ -59,8 +59,4 @@ startCommand = "yarn prod"
 envVars = [
     { key = "NODE_VERSION", value = "14.18.0" },
     { key = "GULP_ENV", value = "prod" }
-]
-
-[volumes]
-public-media = "/srv/open_marketplace/public/media"
-mysql-data = "/var/lib/mysql" 
+] 

@@ -74,10 +74,6 @@ RUN set -eux; \
     bin/console sylius:install:assets --no-interaction; \
     bin/console sylius:theme:assets:install public --no-interaction
 
-VOLUME /srv/open_marketplace/var
-
-VOLUME /srv/open_marketplace/public/media
-
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
 
