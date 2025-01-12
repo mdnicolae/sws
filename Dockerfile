@@ -51,6 +51,13 @@ WORKDIR /srv/open_marketplace
 ENV APP_ENV=prod
 ENV PHP_DATE_TIMEZONE=UTC
 
+# Set up directories and symlinks first
+RUN set -eux; \
+    mkdir -p data/var/cache data/var/log data/media; \
+    ln -sf /srv/open_marketplace/data/var var; \
+    ln -sf /srv/open_marketplace/data/media public/media; \
+    chown -R www-data:www-data data
+
 # prevent the reinstallation of vendors at every changes in the source code
 COPY composer.* ./
 RUN set -eux; \
@@ -67,15 +74,13 @@ COPY src src/
 COPY templates templates/
 COPY translations translations/
 
+# Run Symfony commands after directory setup
 RUN set -eux; \
-    mkdir -p var/cache var/log data/media; \
     composer dump-autoload --classmap-authoritative; \
-    APP_SECRET='' composer run-script post-install-cmd; \
+    APP_SECRET=dummy composer run-script post-install-cmd; \
     chmod +x bin/console; sync; \
     bin/console sylius:install:assets --no-interaction; \
-    bin/console sylius:theme:assets:install public --no-interaction; \
-    ln -sf /srv/open_marketplace/data/media public/media; \
-    ln -sf /srv/open_marketplace/data/var var
+    bin/console sylius:theme:assets:install public --no-interaction
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
