@@ -1,7 +1,6 @@
 [build]
 builder = "nixpacks"
 buildCommand = """
-composer require --no-scripts league/flysystem-aws-s3-v3 predis/predis && \
 composer install --prefer-dist --no-interaction --no-scripts --no-progress && \
 composer dump-autoload --classmap-authoritative && \
 bin/console sylius:install:assets --no-interaction && \
@@ -20,6 +19,7 @@ APP_ENV = "prod"
 APP_DEBUG = "0"
 NGINX_VERSION = "1.21"
 COMPOSER_ALLOW_SUPERUSER = "1"
+RAILWAY_RUN_UID = "0"
 
 [[services]]
 name = "web"
@@ -28,11 +28,12 @@ envVars = [
     { key = "APP_SECRET", value = "$APP_SECRET" },
     { key = "DATABASE_URL", value = "$DATABASE_URL" },
     { key = "PHP_DATE_TIMEZONE", value = "UTC" },
-    { key = "MAILER_URL", value = "$MAILER_URL" },
-    { key = "SUPABASE_URL", value = "$SUPABASE_URL" },
-    { key = "SUPABASE_KEY", value = "$SUPABASE_KEY" },
-    { key = "SUPABASE_BUCKET", value = "sylius-media" }
+    { key = "MAILER_URL", value = "$MAILER_URL" }
 ]
+
+[services.volume]
+mountPath = "/srv/open_marketplace/data"
+size = 512 # MB
 
 [[services]]
 name = "mysql"

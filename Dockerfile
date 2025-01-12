@@ -68,12 +68,14 @@ COPY templates templates/
 COPY translations translations/
 
 RUN set -eux; \
-    mkdir -p var/cache var/log; \
+    mkdir -p var/cache var/log data/media; \
     composer dump-autoload --classmap-authoritative; \
     APP_SECRET='' composer run-script post-install-cmd; \
     chmod +x bin/console; sync; \
     bin/console sylius:install:assets --no-interaction; \
-    bin/console sylius:theme:assets:install public --no-interaction
+    bin/console sylius:theme:assets:install public --no-interaction; \
+    ln -sf /srv/open_marketplace/data/media public/media; \
+    ln -sf /srv/open_marketplace/data/var var
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
