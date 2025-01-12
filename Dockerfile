@@ -49,6 +49,7 @@ WORKDIR /srv/open_marketplace
 
 # build for production
 ENV APP_ENV=prod
+ENV PHP_DATE_TIMEZONE=UTC
 
 # prevent the reinstallation of vendors at every changes in the source code
 COPY composer.* ./

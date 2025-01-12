@@ -20,14 +20,13 @@ services:
 
 sylius_core:
     filesystem:
-        adapter: aws-s3
-        adapter_options:
+        adapter:
+            type: aws-s3
             bucket: '%env(SUPABASE_BUCKET)%'
             region: 'us-east-1'
             version: 'latest'
             endpoint: '%env(SUPABASE_URL)%/storage/v1'
-            credentials:
-                key: '%env(SUPABASE_KEY)%'
-                secret: 'dummy' # Supabase uses key-only auth
+            key: '%env(SUPABASE_KEY)%'
+            secret: 'dummy'
             options:
                 override_endpoint: true 
